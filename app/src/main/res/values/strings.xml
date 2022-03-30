@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Chatify</string>
+    <string name="menu_button">Menu</string>
+    <string name="back_button">Go back</string>
+</resources>
