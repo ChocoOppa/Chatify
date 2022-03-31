@@ -10,9 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso;
 
-//import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MenuActivity extends Activity {
     private ImageButton backButton;
@@ -32,7 +32,7 @@ public class MenuActivity extends Activity {
         TextView topTextView = (TextView)findViewById(R.id.titleTextView);
         topTextView.setText("Menu");
         ImageView img = (ImageView) findViewById(R.id.profile_picture);
-        //Picasso.get().load("https://i.pinimg.com/736x/4f/db/1c/4fdb1c761d2a2e604012123e981a0a1c.jpg").resize(400, 400).centerCrop().transform(new CropCircleTransformation()).into(img);
+        Picasso.get().load("https://i.pinimg.com/736x/4f/db/1c/4fdb1c761d2a2e604012123e981a0a1c.jpg").resize(400, 400).centerCrop().transform(new CropCircleTransformation()).into(img);
 
         backButton = (ImageButton) findViewById(R.id.back_button);
         backButton.setOnClickListener(backButtonClicked);

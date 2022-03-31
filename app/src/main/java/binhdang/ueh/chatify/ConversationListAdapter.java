@@ -9,12 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-//import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.List;
 
-//import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class ConversationListAdapter extends BaseAdapter {
     private Context context;
@@ -109,7 +109,7 @@ public class ConversationListAdapter extends BaseAdapter {
         else {
             myView = (MyView)view.getTag();
         }
-        //Picasso.get().load(testData.get(i).getPhotoSrc()).resize(128, 128).centerCrop().transform(new CropCircleTransformation()).into(myView.imgView);
+        Picasso.get().load(testData.get(i).getPhotoSrc()).resize(128, 128).centerCrop().transform(new CropCircleTransformation()).into(myView.imgView);
         myView.titleTextView = view.findViewById(R.id.conversation_title);
         myView.titleTextView.setText(testData.get(i).getTitle());
         myView.lastestMsgTextView = view.findViewById(R.id.conversation_content);
