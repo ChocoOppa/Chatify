@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MenuActivity">
+
+    <include layout="@layout/action_bar_sub"/>
+
+    <ImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8sp"
+        android:contentDescription="@string/profile_picture" />
+
+    <TextView
+        android:id="@+id/profile_display_name"
+        android:text="congbinh"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_margin="8sp"/>
+
+    <TextView
+        android:id="@+id/profile_username"
+        android:text="congbinh75"
+        android:textSize="16sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_margin="8sp"/>
+
+    <LinearLayout
+        android:background="?android:attr/selectableItemBackground"
+        android:id="@+id/add_friend_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6sp">
+        <ImageView
+            android:src="@drawable/ic_baseline_emoji_people_32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10sp"
+            android:layout_marginEnd="15sp"
+            android:contentDescription="@string/add_friend" />
+        <TextView
+            android:text="@string/add_friend"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="?android:attr/selectableItemBackground"
+        android:id="@+id/edit_profile_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6sp">
+        <ImageView
+            android:src="@drawable/ic_baseline_person_32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10sp"
+            android:layout_marginEnd="15sp"
+            android:contentDescription="@string/edit_profile" />
+        <TextView
+            android:text="@string/edit_profile"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="?android:attr/selectableItemBackground"
+        android:id="@+id/change_password_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6sp">
+        <ImageView
+            android:src="@drawable/ic_baseline_lock_32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10sp"
+            android:layout_marginEnd="15sp"
+            android:contentDescription="@string/change_password" />
+        <TextView
+            android:text="@string/change_password"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="?android:attr/selectableItemBackground"
+        android:id="@+id/logout_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6sp">
+        <ImageView
+            android:src="@drawable/ic_baseline_highlight_off_32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10sp"
+            android:layout_marginEnd="15sp"
+            android:contentDescription="@string/logout" />
+        <TextView
+            android:text="@string/logout"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -11,6 +11,7 @@
     android:background="@color/banana_green">
 
     <ImageButton
+        android:id="@+id/menu_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
@@ -27,4 +28,5 @@
         android:textColor="@color/white"
         android:textSize="24sp"
         tools:ignore="TextContrastCheck" />
+
 </LinearLayout>
