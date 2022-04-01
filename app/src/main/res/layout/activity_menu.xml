@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/profile_display_name"
-        android:text="congbinh"
+        android:text=""
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
 
     <TextView
         android:id="@+id/profile_username"
-        android:text="congbinh75"
+        android:text=""
         android:textSize="16sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

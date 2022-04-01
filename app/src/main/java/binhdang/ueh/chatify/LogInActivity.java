@@ -3,7 +3,9 @@ package binhdang.ueh.chatify;
 import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -71,10 +73,17 @@ public class LogInActivity extends Activity {
                             Log.w(TAG, "Error querying: ", e);
                         }
                     });
-            if (size[0] > 0){
-                Toast.makeText(getApplicationContext(), "Username already existed!", Toast.LENGTH_SHORT).show();
+            if (size[0] <= 0){
+                Toast.makeText(getApplicationContext(), "Username or password invalid!", Toast.LENGTH_SHORT).show();
             }
             else{
+                SharedPreferences sharedRef = this.getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedRef.edit();
+                editor.putString("username", inputUsername.getText().toString());
+                editor.putString("password", inputPassword.getText().toString());
+                editor.apply();
+
+                Toast.makeText(getApplicationContext(), "Successfully logged in!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }

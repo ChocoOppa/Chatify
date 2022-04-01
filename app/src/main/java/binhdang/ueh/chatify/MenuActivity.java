@@ -1,25 +1,35 @@
 package binhdang.ueh.chatify;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MenuActivity extends Activity {
-    private ImageButton backButton;
-    private LinearLayout editProfileButton;
-    private LinearLayout changePasswordButton;
-    private LinearLayout addFriendButton;
-    private LinearLayout logoutButton;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,59 +39,81 @@ public class MenuActivity extends Activity {
     }
 
     private void SetUpViews(){
-        TextView topTextView = (TextView)findViewById(R.id.titleTextView);
-        topTextView.setText("Menu");
-        ImageView img = (ImageView) findViewById(R.id.profile_picture);
-        Picasso.get().load("https://i.pinimg.com/736x/4f/db/1c/4fdb1c761d2a2e604012123e981a0a1c.jpg").resize(400, 400).centerCrop().transform(new CropCircleTransformation()).into(img);
+        final DocumentSnapshot[] user = new DocumentSnapshot[1];
+        db.collection("users")
+                .whereEqualTo("username", sharedPref.getString("username", ""))
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        user[0] = queryDocumentSnapshots.getDocuments().get(0);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error querying: ", e);
+                    }
+                });
 
-        backButton = (ImageButton) findViewById(R.id.back_button);
+        TextView topTextView = findViewById(R.id.titleTextView);
+        topTextView.setText(R.string.menu);
+
+        String pfpUrl = user[0].get("pfpSrc").toString();
+        StorageReference pfp = storage.getReference(pfpUrl);
+        ImageView img = findViewById(R.id.profile_picture);
+        pfp.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri.toString())
+                        .resize(400, 400)
+                        .centerCrop()
+                        .transform(new CropCircleTransformation()).into(img);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@androidx.annotation.NonNull Exception e) {
+                Log.d(TAG, "Failed to load profile picture: " + e);
+            }
+        });
+
+        TextView displayName = findViewById(R.id.profile_display_name);
+        displayName.setText(user[0].get("displayName").toString());
+
+        TextView username = findViewById(R.id.profile_username);
+        username.setText(user[0].get("username").toString());
+
+        ImageButton backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(backButtonClicked);
 
-        editProfileButton = (LinearLayout) findViewById(R.id.edit_profile_button);
+        LinearLayout editProfileButton = findViewById(R.id.edit_profile_button);
         editProfileButton.setOnClickListener(editProfileButtonClicked);
 
-        changePasswordButton = (LinearLayout) findViewById(R.id.change_password_button);
+        LinearLayout changePasswordButton = findViewById(R.id.change_password_button);
         changePasswordButton.setOnClickListener(changePasswordButtonClicked);
 
-        addFriendButton = (LinearLayout) findViewById(R.id.add_friend_button);
+        LinearLayout addFriendButton = findViewById(R.id.add_friend_button);
         addFriendButton.setOnClickListener(addFriendButtonClicked);
 
-        logoutButton = (LinearLayout) findViewById(R.id.logout_button);
+        LinearLayout logoutButton = findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(logoutButtonClicked);
     }
 
-    View.OnClickListener editProfileButtonClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+    View.OnClickListener editProfileButtonClicked = view -> {
 
-        }
     };
 
-    View.OnClickListener changePasswordButtonClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+    View.OnClickListener changePasswordButtonClicked = view -> {
 
-        }
     };
 
-    View.OnClickListener addFriendButtonClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+    View.OnClickListener addFriendButtonClicked = view -> {
 
-        }
     };
 
-    View.OnClickListener logoutButtonClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+    View.OnClickListener logoutButtonClicked = view -> {
 
-        }
     };
 
-    View.OnClickListener backButtonClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            finish();
-        }
-    };
+    View.OnClickListener backButtonClicked = view -> finish();
 }

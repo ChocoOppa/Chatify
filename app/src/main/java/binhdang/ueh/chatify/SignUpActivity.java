@@ -3,6 +3,7 @@ package binhdang.ueh.chatify;
 import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -18,12 +19,18 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SignUpActivity extends Activity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+
     private EditText inputUsername;
     private EditText inputDisplayName;
     private EditText inputPassword;
@@ -83,11 +90,28 @@ public class SignUpActivity extends Activity {
                 Toast.makeText(getApplicationContext(), "Username already existed!", Toast.LENGTH_SHORT).show();
             }
             else {
+                String pfpUri = "android.resource://" + getApplicationContext().getPackageName() + "/drawable/default_pfp";
+                Uri file = Uri.parse(pfpUri);
+                StorageReference storageRef = storage.getReference();
+                StorageReference pfp = storageRef.child("pfp/" + inputUsername.getText() + ".jpg");
+                UploadTask uploadTask = pfp.putFile(file);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Log.d(TAG, "Profile picture uploaded successfully!");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        Log.d(TAG, "Profile picture failed to upload to storage!");
+                    }
+                });
+
                 Map<String, Object> user = new HashMap<>();
                 user.put("username", inputUsername.getText());
                 user.put("displayName", inputDisplayName.getText());
                 user.put("password", inputPassword.getText());
-                user.put("pfpSrc", "");
+                user.put("pfpSrc", pfpUri);
 
                 db.collection("users")
                         .add(user)
@@ -95,12 +119,14 @@ public class SignUpActivity extends Activity {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Toast.makeText(getApplicationContext(), "Successfully signed up!", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.w(TAG, "Error adding document", e);
+                                Toast.makeText(getApplicationContext(), "Please try again!", Toast.LENGTH_SHORT).show();
                             }
                         });
             }
