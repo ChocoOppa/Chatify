@@ -21,25 +21,20 @@ public class ConversationListAdapter extends BaseAdapter {
 
     private List<ConversationBar> testData = Arrays.asList(
             new ConversationBar(
-                    "8",
+                    "0",
                     "Takeshi",
                     "https://cdn.alongwalker.co/vn/wp-content/uploads/2022/02/16114509/image-giao-lo-noi-hang-trieu-nguoi-qua-duong-mot-ngay-o-tokyo-164496150820332.jpg",
                     "Hi!"),
             new ConversationBar(
-                    "9",
+                    "1",
                     "Hinako",
                     "https://i.pinimg.com/736x/59/18/d8/5918d8e9040516b65f93c75a9c5b8175.jpg",
                     "Thank you"),
             new ConversationBar(
-                    "10",
+                    "2",
                     "Suyuki",
                     "https://hinhnen123.com/wp-content/uploads/2021/07/Tong-hop-999-hinh-anh-Avatar-anime-cute-dep-va-an-tuong-nhat.jpg",
-                    "See u later!"),
-            new ConversationBar(
-                    "11",
-                    "Violet",
-                    "https://i.pinimg.com/564x/d9/8e/8f/d98e8fb8d09bae68a580b74625f6ce74.jpg",
-                    "What will be the approriate time? Maybe tommorow morning?")
+                    "See u later!")
     );
 
     public ConversationListAdapter(Context context){
