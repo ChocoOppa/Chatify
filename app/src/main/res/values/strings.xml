@@ -1,12 +1,17 @@
 <resources>
     <string name="app_name">Chatify</string>
+
     <string name="menu_button">Menu</string>
     <string name="back_button">Go back</string>
     <string name="search_button">Search</string>
+    <string name="send_button">Send</string>
+    <string name="info_button">Info</string>
+
     <string name="profile_picture">Profile picture</string>
     <string name="edit_profile">Edit profile</string>
     <string name="change_password">Change password</string>
     <string name="add_friend">Add a friend</string>
+
     <string name="menu">Menu</string>
     <string name="logout">Log out</string>
     <string name="login">Log in</string>
@@ -17,4 +22,12 @@
     <string name="display_name">Display name</string>
     <string name="have_account">Log in an existing account</string>
     <string name="dont_have_account">Create new account</string>
+    <string name="save">Save</string>
+    <string name="tap_image_to_edit">Tap image to edit</string>
+    <string name="type_here">Type here</string>
+    <string name="enter_username">Enter username</string>
+    <string name="add_this_user">Add this user</string>
+    <string name="remove_this_friend">Remove friend</string>
+    <string name="block_this_user">Block this user</string>
+
 </resources>

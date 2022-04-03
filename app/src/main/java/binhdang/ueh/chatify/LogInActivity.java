@@ -3,7 +3,6 @@ package binhdang.ueh.chatify;
 import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,9 +15,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class LogInActivity extends Activity {
@@ -56,36 +56,33 @@ public class LogInActivity extends Activity {
             Toast.makeText(getApplicationContext(), "Please fill in all required fills!", Toast.LENGTH_SHORT).show();
         }
         else{
-            final int[] size = {0};
             db.collection("users")
-                    .whereEqualTo("username", inputUsername.getText())
-                    .whereEqualTo("password", inputPassword.getText())
+                    .whereEqualTo("username", inputUsername.getText().toString())
+                    .whereEqualTo("password", inputPassword.getText().toString())
                     .get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            size[0] = queryDocumentSnapshots.getDocuments().size();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error querying: ", e);
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if(document.getData().size() > 0){
+                                        SharedPreferences sharedRef = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedRef.edit();
+                                        editor.putString("username", inputUsername.getText().toString());
+                                        editor.putString("password", inputPassword.getText().toString());
+                                        editor.apply();
+                                        Toast.makeText(getApplicationContext(), "Welcome back!", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(), "Username or password invalid!", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            } else {
+                                Log.d(TAG, "Error querying: ", task.getException());
+                            }
                         }
                     });
-            if (size[0] <= 0){
-                Toast.makeText(getApplicationContext(), "Username or password invalid!", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                SharedPreferences sharedRef = this.getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedRef.edit();
-                editor.putString("username", inputUsername.getText().toString());
-                editor.putString("password", inputPassword.getText().toString());
-                editor.apply();
-
-                Toast.makeText(getApplicationContext(), "Successfully logged in!", Toast.LENGTH_SHORT).show();
-                finish();
-            }
         }
     }
 }

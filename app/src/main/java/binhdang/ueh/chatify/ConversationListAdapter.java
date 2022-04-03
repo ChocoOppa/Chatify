@@ -21,41 +21,6 @@ public class ConversationListAdapter extends BaseAdapter {
 
     private List<ConversationBar> testData = Arrays.asList(
             new ConversationBar(
-                    "1",
-                    "Adam",
-                    "https://images.pexels.com/photos/358238/pexels-photo-358238.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                    "sup bro!"),
-            new ConversationBar(
-                    "2",
-                    "Beth",
-                    "https://thumbs.dreamstime.com/b/beautiful-golden-autumn-scenery-trees-golden-leaves-sunshine-scotland-united-kingdom-beautiful-golden-autumn-124278811.jpg",
-                    "where r u?"),
-            new ConversationBar(
-                    "3",
-                    "Charlie",
-                    "https://media.istockphoto.com/photos/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-picture-id1093110112?k=20&m=1093110112&s=612x612&w=0&h=3OhKOpvzOSJgwThQmGhshfOnZTvMExZX2R91jNNStBY=",
-                    "Hav fun!"),
-            new ConversationBar(
-                    "4",
-                    "Dave",
-                    "https://media.istockphoto.com/photos/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-picture-id1093110112?k=20&m=1093110112&s=612x612&w=0&h=3OhKOpvzOSJgwThQmGhshfOnZTvMExZX2R91jNNStBY=",
-                    "yo"),
-            new ConversationBar(
-                    "5",
-                    "Emily",
-                    "https://www.traveloffpath.com/wp-content/uploads/2021/11/japan-scenery.jpg",
-                    "Hi there!"),
-            new ConversationBar(
-                    "6",
-                    "Francis",
-                    "https://media.istockphoto.com/photos/fuji-mountain-red-maple-tree-and-fisherman-boat-with-morning-mist-in-picture-id1192780580?k=20&m=1192780580&s=612x612&w=0&h=STSjwbr2JAtCkkBb2yGGWl1IYhxb_ro5XBS-JRnpgmw=",
-                    "come here"),
-            new ConversationBar(
-                    "7",
-                    "Gustav",
-                    "https://medical-treatment-japan.jp/en/wp-content/uploads/sites/2/2018/05/fuji-1.png",
-                    "okay"),
-            new ConversationBar(
                     "8",
                     "Takeshi",
                     "https://cdn.alongwalker.co/vn/wp-content/uploads/2022/02/16114509/image-giao-lo-noi-hang-trieu-nguoi-qua-duong-mot-ngay-o-tokyo-164496150820332.jpg",

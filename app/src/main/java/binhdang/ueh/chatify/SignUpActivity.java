@@ -5,7 +5,6 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -14,16 +13,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,25 +61,15 @@ public class SignUpActivity extends Activity {
                 TextUtils.isEmpty(inputDisplayName.getText())){
             Toast.makeText(getApplicationContext(), "Please fill in all required fills!", Toast.LENGTH_SHORT).show();
         }
-        else if (!inputPassword.getText().equals(inputConfirmPassword.getText())){
+        else if (!(inputPassword.getText().toString().equals(inputConfirmPassword.getText().toString()))){
             Toast.makeText(getApplicationContext(), "Password and confirmation aren't matched!", Toast.LENGTH_SHORT).show();
         }
         else{
             final int[] size = {0};
             db.collection("users")
-                    .whereEqualTo("username", inputUsername.getText()).get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            size[0] = queryDocumentSnapshots.getDocuments().size();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error querying: ", e);
-                        }
-                    });
+                    .whereEqualTo("username", inputUsername.getText().toString()).get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> size[0] = queryDocumentSnapshots.getDocuments().size())
+                    .addOnFailureListener(e -> Log.w(TAG, "Error querying: ", e));
             if (size[0] > 0){
                 Toast.makeText(getApplicationContext(), "Username already existed!", Toast.LENGTH_SHORT).show();
             }
@@ -93,41 +77,29 @@ public class SignUpActivity extends Activity {
                 String pfpUri = "android.resource://" + getApplicationContext().getPackageName() + "/drawable/default_pfp";
                 Uri file = Uri.parse(pfpUri);
                 StorageReference storageRef = storage.getReference();
-                StorageReference pfp = storageRef.child("pfp/" + inputUsername.getText() + ".jpg");
+                StorageReference pfp = storageRef.child("pfp/" + inputUsername.getText().toString() + ".jpg");
                 UploadTask uploadTask = pfp.putFile(file);
-                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Log.d(TAG, "Profile picture uploaded successfully!");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@androidx.annotation.NonNull Exception e) {
-                        Log.d(TAG, "Profile picture failed to upload to storage!");
-                    }
-                });
+                uploadTask.addOnSuccessListener(taskSnapshot -> Log.d(TAG, "Profile picture uploaded successfully!")).
+                        addOnFailureListener(e -> Log.d(TAG, "Profile picture failed to upload to storage!"));
+
+                String username = inputUsername.getText().toString();
+                String displayName = inputDisplayName.getText().toString();
+                String password = inputPassword.getText().toString();
 
                 Map<String, Object> user = new HashMap<>();
-                user.put("username", inputUsername.getText());
-                user.put("displayName", inputDisplayName.getText());
-                user.put("password", inputPassword.getText());
-                user.put("pfpSrc", pfpUri);
+                user.put("username", username);
+                user.put("displayName", displayName);
+                user.put("password", password);
 
                 db.collection("users")
                         .add(user)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(getApplicationContext(), "Successfully signed up!", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
+                        .addOnSuccessListener(documentReference -> {
+                            Toast.makeText(getApplicationContext(), "Successfully signed up!", Toast.LENGTH_SHORT).show();
+                            finish();
                         })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                                Toast.makeText(getApplicationContext(), "Please try again!", Toast.LENGTH_SHORT).show();
-                            }
+                        .addOnFailureListener(e -> {
+                            Log.w(TAG, "Error adding document", e);
+                            Toast.makeText(getApplicationContext(), "Please try again!", Toast.LENGTH_SHORT).show();
                         });
             }
         }

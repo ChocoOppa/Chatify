@@ -16,63 +16,85 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.ref.WeakReference;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
     private ListView listView;
     private ImageButton menuButton;
+
+    public static WeakReference<MainActivity> weakActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        weakActivity = new WeakReference<>(MainActivity.this);
 
-        if (CheckUserInSharedRef() && CheckUserInSharedRefValid()) {
-            SetUpViews();
+        if (CheckUserInSharedRef()) {
+            CheckUserInSharedRefValid();
         }
         else {
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.clear().apply();
-            Intent intent = new Intent(getApplicationContext(), LogInActivity.class);
-            startActivity(intent);
+            ReLogin();
         }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        SetUpViews();
+    }
+
+    public static MainActivity getInstanceActivity() {
+        return weakActivity.get();
     }
 
     private boolean CheckUserInSharedRef(){
+        SharedPreferences sharedPref = getSharedPreferences(getPackageName(), MODE_PRIVATE);
         return sharedPref.contains("username");
     }
 
-    private boolean CheckUserInSharedRefValid(){
-        final int[] size = {0};
+    private void CheckUserInSharedRefValid(){
+        SharedPreferences sharedPref = getSharedPreferences(getPackageName(), MODE_PRIVATE);
         db.collection("users")
                 .whereEqualTo("username", sharedPref.getString("username", ""))
                 .whereEqualTo("password", sharedPref.getString("password", ""))
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        size[0] = queryDocumentSnapshots.getDocuments().size();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error querying: ", e);
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.getData().size() > 0){
+                                    SetUpViews();
+                                }
+                                else{
+                                    ReLogin();
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error querying: ", task.getException());
+                        }
                     }
                 });
-        if (size[0] <= 0){
-            return false;
-        }
-        else{
-            return true;
-        }
+    }
+
+    public void ReLogin(){
+        SharedPreferences sharedPref = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear().apply();
+        Intent intent = new Intent(getApplicationContext(), LogInActivity.class);
+        startActivity(intent);
+        Log.d("Query result", "Not yet logged in!");
     }
 
     private void SetUpViews(){
