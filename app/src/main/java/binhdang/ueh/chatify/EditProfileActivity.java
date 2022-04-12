@@ -5,9 +5,6 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,10 +27,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import java.util.Map;
-import java.util.Objects;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -135,6 +128,23 @@ public class EditProfileActivity extends Activity {
     }
 
     private void Submit(){
+        String displayName = String.valueOf(editDisplayName.getText());
+        SharedPreferences sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE);
 
+        if(!editDisplayName.getText().toString().equals("")) {
+            db.collection("users")
+                    .whereEqualTo("username", sharedPref.getString("username", ""))
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                            String docID = documentSnapshot.getId();
+                            db.collection("users")
+                                    .document(docID)
+                                    .update("displayName", displayName);
+                        }
+                    });
+        } else {
+            Log.w("NAME", "Display name is empty");
+        }
     }
 }

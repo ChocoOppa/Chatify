@@ -108,7 +108,8 @@ public class MenuActivity extends Activity {
     };
 
     View.OnClickListener changePasswordButtonClicked = view -> {
-
+        Intent intent = new Intent(getApplicationContext(), ChangePasswordActivity.class);
+        startActivity(intent);
     };
 
     View.OnClickListener addFriendButtonClicked = view -> {
