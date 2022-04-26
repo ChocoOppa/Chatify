@@ -16,8 +16,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -140,11 +142,18 @@ public class EditProfileActivity extends Activity {
                             String docID = documentSnapshot.getId();
                             db.collection("users")
                                     .document(docID)
-                                    .update("displayName", displayName);
+                                    .update("displayName", displayName)
+                                    .addOnCompleteListener(task1 -> {
+                                        Toast.makeText(getApplicationContext(), "Display name changed successfully!", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(getApplicationContext(), "Something is wrong! Try again", Toast.LENGTH_SHORT).show();
+                                    });
                         }
                     });
         } else {
-            Log.w("NAME", "Display name is empty");
+            Toast.makeText(getApplicationContext(), "Name must not be empty!", Toast.LENGTH_SHORT).show();
         }
     }
 }
