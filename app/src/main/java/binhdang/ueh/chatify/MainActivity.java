@@ -25,10 +25,13 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    ConversationBarDataQuery query;
+    boolean firstTimeLaunched = true;
     private ListView listView;
     private ImageButton menuButton;
 
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        query = new ConversationBarDataQuery(getApplicationContext());
         weakActivity = new WeakReference<>(MainActivity.this);
 
         if (CheckUserInSharedRef()) {
@@ -51,7 +55,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        SetUpViews();
+        if(firstTimeLaunched){
+            firstTimeLaunched = false;
+        }
+        else {
+            SetUpViews();
+        }
     }
 
     public static MainActivity getInstanceActivity() {
@@ -75,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.getData().size() > 0){
-                                    SetUpViews();
+
                                 }
                                 else{
                                     ReLogin();
@@ -98,8 +107,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void SetUpViews(){
+        List<ConversationBar> data = query.getData();
+
         listView = (ListView) findViewById(R.id.conversation_list);
-        ConversationListAdapter adapter = new ConversationListAdapter(getApplicationContext());
+        ConversationListAdapter adapter = new ConversationListAdapter(getApplicationContext(), data);
         listView.setAdapter(adapter);
 
         menuButton = (ImageButton) findViewById(R.id.menu_button);
@@ -113,4 +124,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     };
+
+    public void UpdateMenu(){
+        SetUpViews();
+    }
 }

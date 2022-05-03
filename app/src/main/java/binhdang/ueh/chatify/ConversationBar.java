@@ -4,7 +4,8 @@ public class ConversationBar {
     private String id;
     private String title;
     private String photoSrc;
-    private String lastestMessage;
+    private String lastMessage;
+    private String lastMessageTime;
 
     public String getId() {
         return id;
@@ -30,18 +31,27 @@ public class ConversationBar {
         this.photoSrc = photoSrc;
     }
 
-    public String getLastestMessage() {
-        return lastestMessage;
+    public String getLastMessage() {
+        return lastMessage;
     }
 
-    public void setLastestMessage(String lastestMessage) {
-        this.lastestMessage = lastestMessage;
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
     }
 
-    public ConversationBar(String id, String title, String photoSrc, String lastestMessage){
+    public String getLastMessageTime() {
+        return lastMessageTime;
+    }
+
+    public void setLastMessageTime(String lastMessageTime) {
+        this.lastMessageTime = lastMessageTime;
+    }
+
+    public ConversationBar(String id, String title, String photoSrc, String lastMessage, String lastMessageTime){
         setId(id);
         setTitle(title);
         setPhotoSrc(photoSrc);
-        setLastestMessage(lastestMessage);
+        setLastMessage(lastMessage);
+        setLastMessageTime(lastMessageTime);
     }
 }

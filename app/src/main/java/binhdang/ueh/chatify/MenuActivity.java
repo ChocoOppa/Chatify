@@ -75,20 +75,17 @@ public class MenuActivity extends Activity {
         db.collection("users")
                 .whereEqualTo("username", sharedPref.getString("username", ""))
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                TextView displayName = findViewById(R.id.profile_display_name);
-                                displayName.setText(document.getData().get("displayName").toString());
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            TextView displayName = findViewById(R.id.profile_display_name);
+                            displayName.setText(document.getData().get("displayName").toString());
 
-                                TextView username = findViewById(R.id.profile_username);
-                                username.setText(document.getData().get("username").toString());
-                            }
-                        } else {
-                            Log.d(TAG, "Error querying: " + task.getException());
+                            TextView username = findViewById(R.id.profile_username);
+                            username.setText(document.getData().get("username").toString());
                         }
+                    } else {
+                        Log.d(TAG, "Error querying: " + task.getException());
                     }
                 });
 
@@ -113,7 +110,8 @@ public class MenuActivity extends Activity {
     };
 
     View.OnClickListener addFriendButtonClicked = view -> {
-
+        Intent intent = new Intent(getApplicationContext(), AddFriendActivity.class);
+        startActivity(intent);
     };
 
     View.OnClickListener logoutButtonClicked = view -> {

@@ -60,27 +60,24 @@ public class LogInActivity extends Activity {
                     .whereEqualTo("username", inputUsername.getText().toString())
                     .whereEqualTo("password", inputPassword.getText().toString())
                     .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    if(document.getData().size() > 0){
-                                        SharedPreferences sharedRef = getSharedPreferences(getPackageName(), MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedRef.edit();
-                                        editor.putString("username", inputUsername.getText().toString());
-                                        editor.putString("password", inputPassword.getText().toString());
-                                        editor.apply();
-                                        Toast.makeText(getApplicationContext(), "Welcome back!", Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    }
-                                    else {
-                                        Toast.makeText(getApplicationContext(), "Username or password invalid!", Toast.LENGTH_SHORT).show();
-                                    }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(document.getData().size() > 0){
+                                    SharedPreferences sharedRef = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedRef.edit();
+                                    editor.putString("username", inputUsername.getText().toString());
+                                    editor.putString("password", inputPassword.getText().toString());
+                                    editor.apply();
+                                    Toast.makeText(getApplicationContext(), "Welcome back!", Toast.LENGTH_SHORT).show();
+                                    finish();
                                 }
-                            } else {
-                                Log.d(TAG, "Error querying: ", task.getException());
+                                else {
+                                    Toast.makeText(getApplicationContext(), "Username or password invalid!", Toast.LENGTH_SHORT).show();
+                                }
                             }
+                        } else {
+                            Log.d(TAG, "Error querying: ", task.getException());
                         }
                     });
         }
