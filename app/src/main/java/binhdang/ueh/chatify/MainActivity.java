@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     boolean firstTimeLaunched = true;
     private ListView listView;
     private ImageButton menuButton;
+    List<ConversationBar> data;
 
     public static WeakReference<MainActivity> weakActivity;
 
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         query = new ConversationBarDataQuery(getApplicationContext());
+        data = query.getData();
         weakActivity = new WeakReference<>(MainActivity.this);
 
         if (CheckUserInSharedRef()) {
@@ -57,9 +60,10 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if(firstTimeLaunched){
             firstTimeLaunched = false;
+            SetUpViews();
         }
         else {
-            SetUpViews();
+            SetUpConversationsList();
         }
     }
 
@@ -107,14 +111,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void SetUpViews(){
-        List<ConversationBar> data = query.getData();
+        menuButton = (ImageButton) findViewById(R.id.menu_button);
+        menuButton.setOnClickListener(menuClicked);
+    }
 
+    private void SetUpConversationsList(){
         listView = (ListView) findViewById(R.id.conversation_list);
         ConversationListAdapter adapter = new ConversationListAdapter(getApplicationContext(), data);
         listView.setAdapter(adapter);
 
-        menuButton = (ImageButton) findViewById(R.id.menu_button);
-        menuButton.setOnClickListener(menuClicked);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     View.OnClickListener menuClicked = new View.OnClickListener() {
@@ -126,6 +137,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void UpdateMenu(){
-        SetUpViews();
+        SetUpConversationsList();
     }
 }
