@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         query = new ConversationBarDataQuery(getApplicationContext());
-        data = query.getData();
         weakActivity = new WeakReference<>(MainActivity.this);
 
         if (CheckUserInSharedRef()) {
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             SetUpViews();
         }
         else {
-            SetUpConversationsList();
+            query.retrieveData();
         }
     }
 
@@ -87,10 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.getData().size() > 0){
-
-                                }
-                                else{
+                                if (document.getData().size() <= 0){
                                     ReLogin();
                                 }
                             }
@@ -137,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void UpdateMenu(){
+        data = query.getData();
         SetUpConversationsList();
     }
 }

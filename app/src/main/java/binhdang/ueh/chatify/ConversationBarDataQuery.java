@@ -29,7 +29,8 @@ public class ConversationBarDataQuery {
         retrieveData();
     }
 
-    private void retrieveData(){
+    public void retrieveData(){
+        data.clear();
         sharedPref = context.getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE);
         //LEVEL 1 - Check which conversations you are in
         //-------------------------------------------------------------
