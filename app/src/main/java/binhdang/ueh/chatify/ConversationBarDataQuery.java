@@ -38,54 +38,61 @@ public class ConversationBarDataQuery {
                 .get()
                 .addOnCompleteListener(task -> {
                     for (QueryDocumentSnapshot document : task.getResult()){
-                        Map result = document.getData();
-                        // LEVEL 2 - Get the type of conversation
-                        //-------------------------------------------------------------
-                        db.collection("conversations")
-                                .whereEqualTo("conversation", result.get("conversation").toString())
-                                .get()
-                                .addOnCompleteListener(task1 -> {
-                                    for (QueryDocumentSnapshot document1 : task1.getResult()){
-                                        Map result1 = document1.getData();
-                                        if (result1.get("type").equals("private")){
-                                            // LEVEL 3 - Get conversation bar details if conversation is private
-                                            //-------------------------------------------------------------
-                                            db.collection("conversationsBars")
-                                                    .whereEqualTo("conversation", result1.get("conversation"))
-                                                    .get()
-                                                    .addOnCompleteListener(task2 -> {
-                                                        for (QueryDocumentSnapshot document2 : task2.getResult()) {
-                                                            Map result2 = document2.getData();
-                                                            if(result2.get("otherUser").toString().equals(sharedPref.getString("username", ""))){
-                                                                continue;
-                                                            }
-                                                            // LEVEL 4 - Add details to bar after retrieve other user's data
-                                                            //-------------------------------------------------------------
-                                                            db.collection("users")
-                                                                    .whereEqualTo("username", result2.get("otherUser"))
-                                                                    .get()
-                                                                    .addOnCompleteListener(task3 -> {
-                                                                        for (QueryDocumentSnapshot document3 : task3.getResult()) {
-                                                                            Map result3 = document3.getData();
-                                                                            ConversationBar bar = new ConversationBar(
-                                                                                    document2.getId(),
-                                                                                    result3.get("displayName").toString(),
-                                                                                    "pfp/" + result3.get("username") + ".jpg",
-                                                                                    result2.get("lastConversationMsg").toString(),
-                                                                                    result2.get("lastConversationTime").toString());
-                                                                            data.add(bar);
-
-                                                                            Tasks.whenAllSuccess(task, task1, task2, task3).addOnSuccessListener(list -> MainActivity.getInstanceActivity().UpdateMenu());
+                        if (document.getData().size() > 0) {
+                            Map result = document.getData();
+                            // LEVEL 2 - Get the type of conversation
+                            //-------------------------------------------------------------
+                            db.collection("conversations")
+                                    .whereEqualTo("conversation", result.get("conversation").toString())
+                                    .get()
+                                    .addOnCompleteListener(task1 -> {
+                                        for (QueryDocumentSnapshot document1 : task1.getResult()) {
+                                            if (document1.getData().size() > 0) {
+                                                Map result1 = document1.getData();
+                                                if (result1.get("type").equals("private")) {
+                                                    // LEVEL 3 - Get conversation bar details if conversation is private
+                                                    //-------------------------------------------------------------
+                                                    db.collection("conversationsBars")
+                                                            .whereEqualTo("conversation", result1.get("conversation"))
+                                                            .get()
+                                                            .addOnCompleteListener(task2 -> {
+                                                                for (QueryDocumentSnapshot document2 : task2.getResult()) {
+                                                                    if (document2.getData().size() > 0) {
+                                                                        Map result2 = document2.getData();
+                                                                        if (result2.get("otherUser").toString().equals(sharedPref.getString("username", ""))) {
+                                                                            continue;
                                                                         }
-                                                                    });
-                                                        }
-                                                    });
-                                        }
-                                        else{
+                                                                        // LEVEL 4 - Add details to bar after retrieve other user's data
+                                                                        //-------------------------------------------------------------
+                                                                        db.collection("users")
+                                                                                .whereEqualTo("username", result2.get("otherUser"))
+                                                                                .get()
+                                                                                .addOnCompleteListener(task3 -> {
+                                                                                    for (QueryDocumentSnapshot document3 : task3.getResult()) {
+                                                                                        if (document3.getData().size() > 0) {
+                                                                                            Map result3 = document3.getData();
+                                                                                            ConversationBar bar = new ConversationBar(
+                                                                                                    document2.getId(),
+                                                                                                    result3.get("displayName").toString(),
+                                                                                                    "pfp/" + result3.get("username") + ".jpg",
+                                                                                                    result2.get("lastConversationMsg").toString(),
+                                                                                                    result2.get("lastConversationTime").toString());
+                                                                                            data.add(bar);
 
+                                                                                            Tasks.whenAllSuccess(task, task1, task2, task3).addOnSuccessListener(list -> MainActivity.getInstanceActivity().UpdateMenu());
+                                                                                        }
+                                                                                    }
+                                                                                });
+                                                                    }
+                                                                }
+                                                            });
+                                                } else {
+
+                                                }
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                        }
                     }
                 });
     }
