@@ -51,7 +51,7 @@ public class ConversationListAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return i;
+        return Long.parseLong(data.get(i).getId());
     }
 
     @Override
