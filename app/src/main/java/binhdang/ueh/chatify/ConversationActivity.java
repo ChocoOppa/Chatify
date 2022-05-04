@@ -13,16 +13,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -37,12 +32,12 @@ import java.util.Map;
 
 public class ConversationActivity extends Activity {
 
-    TextView      nameofreciever;
-    EditText      inputchat;
-    ImageButton   backbutton;
-    ImageButton   infobutton;
-    ImageButton   sendbutton;
-    RecyclerView  message_recyclerView;
+    TextView nameofreciever;
+    EditText inputchat;
+    ImageButton backbutton;
+    ImageButton infobutton;
+    ImageButton sendbutton;
+    RecyclerView message_recyclerView;
     MessagesAdapter messAdapter;
     FirebaseFirestore db= FirebaseFirestore.getInstance();
     private  String msendername,mreceivername,senderroom, recieverroom;
@@ -65,11 +60,12 @@ public class ConversationActivity extends Activity {
         messArraylist = new ArrayList<>();
         messAdapter=new MessagesAdapter(ConversationActivity.this,messArraylist);
         message_recyclerView.setAdapter(messAdapter);
+        message_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         intent=getIntent();
 
-        mreceivername=getIntent().getStringExtra("name");
-        calendar=Calendar.getInstance();
-        simpleDateFormat=new SimpleDateFormat("hh:mm a");
+        mreceivername = getIntent().getStringExtra("name");
+        calendar = Calendar.getInstance();
+        simpleDateFormat = new SimpleDateFormat("hh:mm a");
         SharedPreferences sharedPref = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         msendername = sharedPref.getString("username", "");
 
@@ -95,7 +91,7 @@ public class ConversationActivity extends Activity {
                 );
 
 
-        messAdapter=new MessagesAdapter(ConversationActivity.this,messArraylist);
+        messAdapter = new MessagesAdapter(ConversationActivity.this,messArraylist);
         db.collection("chats")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -111,6 +107,7 @@ public class ConversationActivity extends Activity {
                     }
                     messAdapter=new MessagesAdapter(ConversationActivity.this,messArraylist);
                     message_recyclerView.setAdapter(messAdapter);
+                    message_recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 });
 
 
@@ -136,9 +133,9 @@ public class ConversationActivity extends Activity {
                 }
                 else
                 {
-                    Date date=new Date();
+                    Date date = new Date();
                     time=simpleDateFormat.format(calendar.getTime());
-                    Messages messages=new Messages(enteredmessage,time,msendername);
+                    Messages messages = new Messages(enteredmessage,time,msendername);
                     Map<String, Object> usersend = new HashMap<>();
                     usersend.put("conversation",senderroom);
                     usersend.put("message",enteredmessage);
@@ -171,23 +168,9 @@ public class ConversationActivity extends Activity {
                                 };
                             }
                     );
-
-
-
                     inputchat.setText(null);
-
-
-
-
                 }
-
-
-
-
             }
         });
-
     }
-
-
 }

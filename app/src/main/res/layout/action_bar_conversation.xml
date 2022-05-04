@@ -22,20 +22,17 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
-
     <TextView
         android:id="@+id/nameofreciever"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="74dp"
-        android:layout_toRightOf="@+id/back_button"
-        android:text="Name of User"
+        android:layout_marginStart="20dp"
+        android:text=""
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/back_button"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton

@@ -1,9 +1,6 @@
 package binhdang.ueh.chatify;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,20 +8,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -51,7 +43,7 @@ public class ConversationListAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return Long.parseLong(data.get(i).getId());
+        return i;
     }
 
     @Override

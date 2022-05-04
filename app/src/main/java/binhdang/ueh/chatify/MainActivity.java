@@ -113,12 +113,14 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         menuButton = (ImageButton) findViewById(R.id.menu_button);
         menuButton.setOnClickListener(menuClicked);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(),ConversationActivity.class);
-                intent.putExtra("name",data.get(i).getTitle());
-                startActivity(intent);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
+                    intent.putExtra("name", data.get(i).getTitle());
+                    startActivity(intent);
+                }
+            });
 
         menuButton = (ImageButton) findViewById(R.id.menu_button);
         menuButton.setOnClickListener(menuClicked);
@@ -132,8 +134,9 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
-
+                Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
+                intent.putExtra("name", data.get(i).getTitle());
+                startActivity(intent);
             }
         });
     }
