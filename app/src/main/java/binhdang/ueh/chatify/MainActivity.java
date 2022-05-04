@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -108,13 +109,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void SetUpViews(){
         List<ConversationBar> data = query.getData();
-
         listView = (ListView) findViewById(R.id.conversation_list);
         ConversationListAdapter adapter = new ConversationListAdapter(getApplicationContext(), data);
         listView.setAdapter(adapter);
-
         menuButton = (ImageButton) findViewById(R.id.menu_button);
         menuButton.setOnClickListener(menuClicked);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(),ConversationActivity.class);
+                intent.putExtra("name",data.get(i).getTitle());
+                startActivity(intent);
+            }
+        });
     }
 
     View.OnClickListener menuClicked = new View.OnClickListener() {

@@ -25,6 +25,8 @@
         <activity android:name=".EditProfileActivity"/>
         <activity android:name=".ChangePasswordActivity"/>
         <activity android:name=".AddFriendActivity"/>
+        <activity android:name=".ConversationActivity"/>
+
     </application>
 
 </manifest>
