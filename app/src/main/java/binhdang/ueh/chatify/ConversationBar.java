@@ -2,6 +2,7 @@ package binhdang.ueh.chatify;
 
 public class ConversationBar {
     private String id;
+    private String conversationName;
     private String title;
     private String photoSrc;
     private String lastMessage;
@@ -47,8 +48,17 @@ public class ConversationBar {
         this.lastMessageTime = lastMessageTime;
     }
 
-    public ConversationBar(String id, String title, String photoSrc, String lastMessage, String lastMessageTime){
+    public String getConversationName() {
+        return conversationName;
+    }
+
+    public void setConversationName(String conversationName) {
+        this.conversationName = conversationName;
+    }
+
+    public ConversationBar(String id, String conversationName, String title, String photoSrc, String lastMessage, String lastMessageTime){
         setId(id);
+        setConversationName(conversationName);
         setTitle(title);
         setPhotoSrc(photoSrc);
         setLastMessage(lastMessage);

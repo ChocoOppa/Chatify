@@ -74,6 +74,7 @@ public class ConversationBarDataQuery {
                                                                                             Map result3 = document3.getData();
                                                                                             ConversationBar bar = new ConversationBar(
                                                                                                     document2.getId(),
+                                                                                                    document2.get("conversation").toString(),
                                                                                                     result3.get("displayName").toString(),
                                                                                                     "pfp/" + result3.get("username") + ".jpg",
                                                                                                     result2.get("lastConversationMsg").toString(),
