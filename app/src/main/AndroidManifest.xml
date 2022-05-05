@@ -25,7 +25,9 @@
         <activity android:name=".EditProfileActivity"/>
         <activity android:name=".ChangePasswordActivity"/>
         <activity android:name=".AddFriendActivity"/>
-        <activity android:name=".ConversationActivity"/>
+        <activity android:name=".ConversationActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".ViewConversationInfoActivity"/>
 
     </application>
 

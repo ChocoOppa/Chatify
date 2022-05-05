@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +15,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class MessagesAdapter extends RecyclerView.Adapter{
     Context context;
     ArrayList<Messages> messArraylist;
+    SimpleDateFormat simpleDateFormat;
     int send = 1;
     int receive = 2;
 
     public MessagesAdapter(Context context, ArrayList<Messages> messArraylist) {
         this.context = context;
         this.messArraylist = messArraylist;
+        simpleDateFormat = new SimpleDateFormat("HH:mm");
 
         Collections.sort(messArraylist, (c1, c2) -> c1.getTime().compareTo(c2.getTime()));
     }
@@ -46,15 +50,16 @@ public class MessagesAdapter extends RecyclerView.Adapter{
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Messages messages = messArraylist.get(position);
+        Log.d("Adding", "Ah yes!");
         if(holder.getClass() == SenderViewHolder.class) {
             SenderViewHolder viewHolder = (SenderViewHolder)holder;
             viewHolder.textViewMessage.setText(messages.getMessage());
-            viewHolder.timeOfMessage.setText(messages.getTime());
+            viewHolder.timeOfMessage.setText(simpleDateFormat.format(Long.parseLong(messages.getTime())));
         }
         else {
             ReceiverViewHolder viewHolder = (ReceiverViewHolder)holder;
             viewHolder.textViewMessage.setText(messages.getMessage());
-            viewHolder.timeOfMessage.setText(messages.getTime());
+            viewHolder.timeOfMessage.setText(simpleDateFormat.format(Long.parseLong(messages.getTime())));
         }
 
     }

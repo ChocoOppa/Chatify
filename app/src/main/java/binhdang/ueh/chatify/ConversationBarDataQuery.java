@@ -1,5 +1,6 @@
 package binhdang.ueh.chatify;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
@@ -7,11 +8,19 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.Size;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -79,6 +88,7 @@ public class ConversationBarDataQuery {
                                                                                                     "pfp/" + result3.get("username") + ".jpg",
                                                                                                     result2.get("lastConversationMsg").toString(),
                                                                                                     result2.get("lastConversationTime").toString());
+
                                                                                             data.add(bar);
 
                                                                                             Tasks.whenAllSuccess(task, task1, task2, task3).addOnSuccessListener(list -> MainActivity.getInstanceActivity().UpdateMenu());

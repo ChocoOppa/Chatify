@@ -87,6 +87,7 @@ public class AddFriendActivity extends Activity {
     };
 
     private void UpdateFriendToAddProfile(String displayName, String username){
+        SharedPreferences sharedPref = getSharedPreferences(getPackageName(), MODE_PRIVATE);
         StorageReference storageRef = storage.getReference();
         String pfpSrc = "pfp/" + username + ".jpg";
         StorageReference pfp = storageRef.child(pfpSrc);
@@ -100,7 +101,19 @@ public class AddFriendActivity extends Activity {
         resultUserName = username;
         friendToAddUsername.setText(username);
 
-        addFriendButton.setVisibility(View.VISIBLE);
+        db.collection("users")
+                .whereEqualTo("user1", sharedPref.getString("username", ""))
+                .whereEqualTo("user2", resultUserName)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        for(QueryDocumentSnapshot doc: task.getResult()) {
+                            if (doc.getData().size() <= 0){
+                                addFriendButton.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                });
     }
 
     View.OnClickListener AddFriendButtonClicked = view -> {

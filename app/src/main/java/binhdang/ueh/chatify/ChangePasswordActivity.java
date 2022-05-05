@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -30,6 +31,9 @@ public class ChangePasswordActivity extends Activity {
     }
 
     private void SetUpViews() {
+        TextView title = findViewById(R.id.titleTextView);
+        title.setText(R.string.change_password);
+
         backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(backButtonClicked);
 

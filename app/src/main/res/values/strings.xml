@@ -11,6 +11,7 @@
     <string name="edit_profile">Edit profile</string>
     <string name="change_password">Change password</string>
     <string name="add_friend">Add a friend</string>
+    <string name="info">Info</string>
 
     <string name="menu">Menu</string>
     <string name="logout">Log out</string>
@@ -27,6 +28,7 @@
     <string name="type_here">Type here</string>
     <string name="enter_username">Enter username</string>
     <string name="add_this_user">Add this user</string>
+    <string name="leave_this_group">Leave this group</string>
     <string name="remove_this_friend">Remove this user</string>
 
 </resources>

@@ -21,6 +21,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ConversationBarDataQuery query;
+    ConversationListAdapter adapter;
     boolean firstTimeLaunched = true;
     private ListView listView;
     private ImageButton menuButton;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         query = new ConversationBarDataQuery(getApplicationContext());
         weakActivity = new WeakReference<>(MainActivity.this);
 
@@ -94,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void SetUpViews(){
         List<ConversationBar> data = query.getData();
+        adapter = new ConversationListAdapter(getApplicationContext(), data);
+        adapter.notifyDataSetChanged();
         listView = findViewById(R.id.conversation_list);
         ConversationListAdapter adapter = new ConversationListAdapter(getApplicationContext(), data);
         listView.setAdapter(adapter);
@@ -105,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void SetUpConversationsList(){
+        adapter.notifyDataSetChanged();
         listView = findViewById(R.id.conversation_list);
-        ConversationListAdapter adapter = new ConversationListAdapter(getApplicationContext(), data);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener((adapterView, view, i, l) -> {

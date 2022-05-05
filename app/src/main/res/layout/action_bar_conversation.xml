@@ -35,6 +35,7 @@
         app:layout_constraintStart_toEndOf="@id/back_button"
         app:layout_constraintTop_toTopOf="parent" />
 
+<!--
     <ImageButton
         android:id="@+id/info_button"
         android:layout_width="wrap_content"
@@ -46,5 +47,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
+-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

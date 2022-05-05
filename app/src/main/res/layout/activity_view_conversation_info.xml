@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/friend_profile_picture"
+            android:id="@+id/conversation_picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -23,7 +23,7 @@
             tools:ignore="ImageContrastCheck,ImageContrastCheck" />
 
         <TextView
-            android:id="@+id/friend_display_name"
+            android:id="@+id/conversation_display_name"
             android:text=""
             android:textSize="24sp"
             android:textStyle="bold"
@@ -41,14 +41,14 @@
             android:textAlignment="center"
             android:layout_margin="8sp"/>
 
-        <Button
-            android:id="@+id/remove_friend_button"
+<!--        <Button
+            android:id="@+id/remove_conversation_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20sp"
             android:text="@string/remove_this_friend"
             android:visibility="gone"
-            tools:ignore="TextContrastCheck" />
+            tools:ignore="TextContrastCheck" />-->
 
     </LinearLayout>
 

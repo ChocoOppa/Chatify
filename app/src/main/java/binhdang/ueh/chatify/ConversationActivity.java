@@ -1,13 +1,13 @@
 package binhdang.ueh.chatify;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -17,12 +17,15 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,15 +35,16 @@ public class ConversationActivity extends Activity {
     TextView conversationTitle;
     EditText inputChat;
     ImageButton backButton;
-    ImageButton infoButton;
+    //ImageButton infoButton;
     ImageButton sendButton;
     RecyclerView messageRecyclerView;
 
     MessagesAdapter messageAdapter;
     ArrayList<Messages> messageArrayList;
     String currentUsername, conversation;
+    String type;
     String time;
-    SimpleDateFormat simpleDateFormat;
+
     String enteredMessage;
 
     @Override
@@ -53,7 +57,9 @@ public class ConversationActivity extends Activity {
         conversationTitle = findViewById(R.id.conversation_title_on_bar);
         inputChat = findViewById(R.id.chat_input);
         backButton = findViewById(R.id.back_button);
-        infoButton = findViewById(R.id.info_button);
+
+        //infoButton = findViewById(R.id.info_button);
+
         sendButton = findViewById(R.id.send_button);
         messageRecyclerView =findViewById(R.id.message_recyclerView);
 
@@ -61,11 +67,32 @@ public class ConversationActivity extends Activity {
 
         conversationTitle.setText(getIntent().getStringExtra("name"));
         conversation = getIntent().getStringExtra("conversation");
-        simpleDateFormat = new SimpleDateFormat("HH:mm");
+
+        db.collection("conversations")
+                .whereEqualTo("conversation", conversation)
+                .get()
+                .addOnCompleteListener(task -> {
+                   for(QueryDocumentSnapshot document: task.getResult()){
+                       Map conversation = document.getData();
+                       type = conversation.get("type").toString();
+                   }
+                });
+
+        db.collection("chats")
+                .whereEqualTo("conversation", conversation)
+                .addSnapshotListener(eventListener);
+
         SharedPreferences sharedPref = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         currentUsername = sharedPref.getString("username", "");
 
         backButton.setOnClickListener(view -> finish());
+
+/*        infoButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), ViewConversationInfoActivity.class);
+            intent.putExtra("conversation", conversation);
+            intent.putExtra("type", type);
+            startActivity(intent);
+        });*/
 
         sendButton.setOnClickListener(view -> {
             enteredMessage = inputChat.getText().toString();
@@ -109,19 +136,18 @@ public class ConversationActivity extends Activity {
         });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        retrieveChatData();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(messageAdapter!=null) {
-            retrieveChatData();
+    private final EventListener<QuerySnapshot> eventListener = ((value, error) -> {
+        if (error != null){
+            return;
         }
-    }
+        if (value != null) {
+            for (DocumentChange documentChange : value.getDocumentChanges()) {
+                if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                    retrieveChatData();
+                }
+            }
+        }
+    });
 
     private void ChatDataUpdate(){
         messageAdapter = new MessagesAdapter(ConversationActivity.this, messageArrayList);
@@ -140,13 +166,16 @@ public class ConversationActivity extends Activity {
                         if(document.getData().size() > 0) {
                             Map msg = document.getData();
                             Messages message = new Messages(msg.get("message").toString(),
-                                    simpleDateFormat.format(Long.parseLong(msg.get("time").toString())),
+                                    msg.get("time").toString(),
                                     msg.get("senderName").toString());
                             messageArrayList.add(message);
                         }
                     }
-                    Log.d("Alo", "Bro");
-                    ChatDataUpdate();
+                    if (messageArrayList.size() > 0){
+                        ChatDataUpdate();
+                    }
                 });
     }
+
+    //public static ConversationActivity getInstance(){ return currentConversation; }
 }
