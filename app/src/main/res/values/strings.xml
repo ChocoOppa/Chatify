@@ -27,7 +27,6 @@
     <string name="type_here">Type here</string>
     <string name="enter_username">Enter username</string>
     <string name="add_this_user">Add this user</string>
-    <string name="remove_this_friend">Remove friend</string>
-    <string name="block_this_user">Block this user</string>
+    <string name="remove_this_friend">Remove this user</string>
 
 </resources>

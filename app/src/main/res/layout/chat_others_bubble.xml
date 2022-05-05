@@ -19,7 +19,7 @@
         android:paddingTop="7dp"
         android:paddingEnd="40dp"
         android:paddingBottom="7dp"
-        android:text=""
+        android:text="Test"
         android:textColor="@color/black"
         android:textSize="18sp" />
 
@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/other_message"
         android:layout_marginStart="-40dp"
+        android:layout_marginEnd="-40dp"
         android:layout_toRightOf="@id/other_message"
         android:padding="7dp"
         android:text="20:09"

@@ -60,13 +60,7 @@ public class ConversationListAdapter extends BaseAdapter {
             myView = (MyView)view.getTag();
         }
         currentView = myView;
-        Log.d("Data size", String.valueOf(data.size()));
-        Collections.sort(data, new Comparator<ConversationBar>() {
-            @Override
-            public int compare(ConversationBar c1, ConversationBar c2) {
-                return c2.getLastMessageTime().compareTo(c1.getLastMessageTime());
-            }
-        });
+        Collections.sort(data, (c1, c2) -> c2.getLastMessageTime().compareTo(c1.getLastMessageTime()));
         if(data.size() > 0) {
             StorageReference storageRef = storage.getReference();
             StorageReference pfp = storageRef.child(data.get(i).getPhotoSrc());

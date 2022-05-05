@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20sp"
-            android:text="@string/add_this_user"
+            android:text="@string/remove_this_friend"
             android:visibility="gone"
             tools:ignore="TextContrastCheck" />
 

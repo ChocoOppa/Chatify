@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MessagesAdapter extends RecyclerView.Adapter{
     Context context;
@@ -25,6 +26,8 @@ public class MessagesAdapter extends RecyclerView.Adapter{
     public MessagesAdapter(Context context, ArrayList<Messages> messArraylist) {
         this.context = context;
         this.messArraylist = messArraylist;
+
+        Collections.sort(messArraylist, (c1, c2) -> c1.getTime().compareTo(c2.getTime()));
     }
 
     @NonNull

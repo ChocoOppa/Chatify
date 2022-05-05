@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -55,38 +57,15 @@ public class ConversationActivity extends Activity {
         sendButton = findViewById(R.id.send_button);
         messageRecyclerView =findViewById(R.id.message_recyclerView);
 
-        ChatDataUpdate();
+        retrieveChatData();
 
         conversationTitle.setText(getIntent().getStringExtra("name"));
         conversation = getIntent().getStringExtra("conversation");
-        simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        simpleDateFormat = new SimpleDateFormat("HH:mm");
         SharedPreferences sharedPref = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         currentUsername = sharedPref.getString("username", "");
 
-        db.collection("chats")
-                .whereEqualTo("conversation", conversation)
-                .get()
-                .addOnCompleteListener(task -> {
-                    messageArrayList.clear();
-                    for(QueryDocumentSnapshot document : task.getResult()) {
-                        if(document.getData().size() > 0) {
-                        Map msg = document.getData();
-                            Messages message = new Messages(msg.get("message").toString(),
-                                    simpleDateFormat.format(Long.parseLong(msg.get("time").toString())),
-                                    msg.get("senderName").toString());
-                            messageArrayList.add(message);
-                        }
-                    }
-                    ChatDataUpdate();
-                });
-
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        backButton.setOnClickListener(view -> finish());
 
         sendButton.setOnClickListener(view -> {
             enteredMessage = inputChat.getText().toString();
@@ -104,10 +83,28 @@ public class ConversationActivity extends Activity {
                 db.collection("chats")
                         .add(message)
                         .addOnCompleteListener(task -> {
-                            ChatDataUpdate();
+                            retrieveChatData();
                         }
                 );
+
                 inputChat.setText("");
+
+                db.collection("conversationsBars")
+                        .whereEqualTo("conversation", conversation)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            for (QueryDocumentSnapshot document: task.getResult()){
+                                String docId = document.getId();
+
+                                db.collection("conversationsBars")
+                                        .document(docId)
+                                        .update("lastConversationMsg", enteredMessage);
+
+                                db.collection("conversationsBars")
+                                        .document(docId)
+                                        .update("lastConversationTime", time);
+                            }
+                        });
             }
         });
     }
@@ -115,14 +112,14 @@ public class ConversationActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-        ChatDataUpdate();
+        retrieveChatData();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         if(messageAdapter!=null) {
-            ChatDataUpdate();
+            retrieveChatData();
         }
     }
 
@@ -130,5 +127,26 @@ public class ConversationActivity extends Activity {
         messageAdapter = new MessagesAdapter(ConversationActivity.this, messageArrayList);
         messageRecyclerView.setAdapter(messageAdapter);
         messageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        messageRecyclerView.scrollToPosition(messageArrayList.size() - 1);
+    }
+
+    private void retrieveChatData(){
+        db.collection("chats")
+                .whereEqualTo("conversation", conversation)
+                .get()
+                .addOnCompleteListener(task -> {
+                    messageArrayList.clear();
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        if(document.getData().size() > 0) {
+                            Map msg = document.getData();
+                            Messages message = new Messages(msg.get("message").toString(),
+                                    simpleDateFormat.format(Long.parseLong(msg.get("time").toString())),
+                                    msg.get("senderName").toString());
+                            messageArrayList.add(message);
+                        }
+                    }
+                    Log.d("Alo", "Bro");
+                    ChatDataUpdate();
+                });
     }
 }

@@ -4,8 +4,6 @@ import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.media.Image;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,10 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.type.Date;
 import com.squareup.picasso.Picasso;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 

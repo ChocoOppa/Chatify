@@ -4,31 +4,19 @@ import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -82,18 +70,15 @@ public class MainActivity extends AppCompatActivity {
                 .whereEqualTo("username", sharedPref.getString("username", ""))
                 .whereEqualTo("password", sharedPref.getString("password", ""))
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.getData().size() <= 0){
-                                    ReLogin();
-                                }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            if (document.getData().size() <= 0){
+                                ReLogin();
                             }
-                        } else {
-                            Log.d(TAG, "Error querying: ", task.getException());
                         }
+                    } else {
+                        Log.d(TAG, "Error querying: ", task.getException());
                     }
                 });
     }
@@ -109,39 +94,33 @@ public class MainActivity extends AppCompatActivity {
 
     private void SetUpViews(){
         List<ConversationBar> data = query.getData();
-        listView = (ListView) findViewById(R.id.conversation_list);
+        listView = findViewById(R.id.conversation_list);
         ConversationListAdapter adapter = new ConversationListAdapter(getApplicationContext(), data);
         listView.setAdapter(adapter);
-        menuButton = (ImageButton) findViewById(R.id.menu_button);
+        menuButton = findViewById(R.id.menu_button);
         menuButton.setOnClickListener(menuClicked);
 
-        menuButton = (ImageButton) findViewById(R.id.menu_button);
+        menuButton = findViewById(R.id.menu_button);
         menuButton.setOnClickListener(menuClicked);
     }
 
     private void SetUpConversationsList(){
-        listView = (ListView) findViewById(R.id.conversation_list);
+        listView = findViewById(R.id.conversation_list);
         ConversationListAdapter adapter = new ConversationListAdapter(getApplicationContext(), data);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
-                intent.putExtra("name", data.get(i).getTitle());
-                intent.putExtra("conversation", data.get(i).getConversationName());
+        listView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
+            intent.putExtra("name", data.get(i).getTitle());
+            intent.putExtra("conversation", data.get(i).getConversationName());
 
-                startActivity(intent);
-            }
+            startActivity(intent);
         });
     }
 
-    View.OnClickListener menuClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-            startActivity(intent);
-        }
+    View.OnClickListener menuClicked = view -> {
+        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+        startActivity(intent);
     };
 
     public void UpdateMenu(){
