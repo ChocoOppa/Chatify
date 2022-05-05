@@ -40,7 +40,7 @@ public class ConversationActivity extends Activity {
     RecyclerView message_recyclerView;
     MessagesAdapter messAdapter;
     FirebaseFirestore db= FirebaseFirestore.getInstance();
-    private  String msendername,mreceivername,senderroom, recieverroom;
+    private  String msendername,mreceivername,senderroom, recieverroom, receiverusername;
     String time;
     ArrayList<Messages> messArraylist;
     Intent intent;
@@ -70,31 +70,20 @@ public class ConversationActivity extends Activity {
         msendername = sharedPref.getString("username", "");
 
         db.collection("conversationsBars")
-                .whereEqualTo("forUser",msendername)
-                .get()
-                .addOnCompleteListener(task -> {
-                    for (QueryDocumentSnapshot doc : task.getResult()){
-                        Map map = doc.getData();
-                        senderroom= map.get("conversation").toString();
-                    }
-                }
-                );
-        db.collection("conversationsBars")
-                .whereEqualTo("otherUser",mreceivername)
-                .get()
-                .addOnCompleteListener(task -> {
-                            for (QueryDocumentSnapshot doc : task.getResult()){
-                                Map map = doc.getData();
-                                recieverroom= map.get("conversation").toString();
-                            }
-                        }
-                );
+                .whereEqualTo("conversation", getIntent().getStringExtra("conversation"))
+                .get().addOnCompleteListener(task -> {
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        Map msg = document.getData();
+                        receiverusername = msg.get("otherUser").toString();
+            }
+        });
+        senderroom= msendername+receiverusername;
+        recieverroom=receiverusername+msendername;
 
-
-        messAdapter = new MessagesAdapter(ConversationActivity.this,messArraylist);
-        db.collection("chats")
+        db.collection("chats").whereEqualTo("conversation",senderroom)
                 .get()
                 .addOnCompleteListener(task -> {
+                    messAdapter=new MessagesAdapter(ConversationActivity.this,messArraylist);
                     messArraylist.clear();
                     for(QueryDocumentSnapshot document : task.getResult()) {
                         if(document.getData().size()>0) {
@@ -105,9 +94,8 @@ public class ConversationActivity extends Activity {
                             messArraylist.add(message);
                         }
                     }
-                    messAdapter=new MessagesAdapter(ConversationActivity.this,messArraylist);
-                    message_recyclerView.setAdapter(messAdapter);
-                    message_recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                    messAdapter.notifyDataSetChanged();
+
                 });
 
 
@@ -173,4 +161,18 @@ public class ConversationActivity extends Activity {
             }
         });
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        messAdapter.notifyDataSetChanged();
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(messAdapter!=null)
+        {
+            messAdapter.notifyDataSetChanged();
+        }
+    }
+
 }

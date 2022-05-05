@@ -27,6 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -113,14 +114,6 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         menuButton = (ImageButton) findViewById(R.id.menu_button);
         menuButton.setOnClickListener(menuClicked);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
-                    intent.putExtra("name", data.get(i).getTitle());
-                    startActivity(intent);
-                }
-            });
 
         menuButton = (ImageButton) findViewById(R.id.menu_button);
         menuButton.setOnClickListener(menuClicked);
@@ -136,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
                 intent.putExtra("name", data.get(i).getTitle());
+                intent.putExtra("conversation", data.get(i).getConversationName());
+
                 startActivity(intent);
             }
         });
