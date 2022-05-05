@@ -35,16 +35,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="TextContrastCheck" />
 
-    <ImageButton
-        android:id="@+id/search_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:contentDescription="@string/search_button"
-        android:src="@drawable/ic_baseline_search_32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

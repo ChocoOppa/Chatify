@@ -22,9 +22,11 @@ public class Messages {
     public String getMessage() {
         return message;
     }
+
     public String getTime() {
         return time;
     }
+
     public void setMessage(String message) {
         this.message = message;
     }

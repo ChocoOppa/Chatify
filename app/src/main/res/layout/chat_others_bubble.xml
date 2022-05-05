@@ -10,28 +10,28 @@
         android:layout_marginEnd="8sp" />
 
     <TextView
-        android:id="@+id/othermessage"
+        android:id="@+id/other_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:background="@drawable/chat_others_bubble_bg"
-        android:paddingLeft="7dp"
+        android:paddingStart="7dp"
         android:paddingTop="7dp"
-        android:paddingRight="40dp"
+        android:paddingEnd="40dp"
         android:paddingBottom="7dp"
-        android:text="Im from Vietnam"
+        android:text=""
         android:textColor="@color/black"
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/timeofothermessage"
+        android:id="@+id/time_of_other_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/othermessage"
-        android:layout_marginLeft="-40dp"
-        android:layout_toRightOf="@id/othermessage"
+        android:layout_alignBottom="@id/other_message"
+        android:layout_marginStart="-40dp"
+        android:layout_toRightOf="@id/other_message"
         android:padding="7dp"
         android:text="20:09"
-        android:textColor="#434343"
+        android:textColor="@color/black"
         android:textSize="10sp" />
 </RelativeLayout>

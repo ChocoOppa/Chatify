@@ -57,6 +57,7 @@
             android:contentDescription="@string/send_button"
             android:padding="15sp"
             android:src="@drawable/ic_baseline_send_32"
+            android:background="@null"
             android:text="@string/send_button" />
 
     </LinearLayout>

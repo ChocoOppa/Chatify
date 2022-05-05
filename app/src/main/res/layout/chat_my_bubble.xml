@@ -11,7 +11,7 @@
         android:id="@+id/layoutformessage">
 
         <TextView
-            android:id="@+id/mymessage"
+            android:id="@+id/my_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/chat_my_bubble_bg"
@@ -19,20 +19,20 @@
             android:paddingTop="7dp"
             android:paddingRight="40dp"
             android:paddingBottom="7dp"
-            android:text="Hello! Where are you from?"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/timeofmymessage"
+            android:id="@+id/time_of_my_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/mymessage"
-            android:layout_marginLeft="-40dp"
-            android:layout_toRightOf="@id/mymessage"
+            android:layout_alignBottom="@id/my_message"
+            android:layout_marginStart="-40dp"
+            android:layout_toRightOf="@id/my_message"
             android:padding="7dp"
             android:text="20:09"
-            android:textColor="#434343"
+            android:textColor="@color/white"
             android:textSize="10sp" />
 
 

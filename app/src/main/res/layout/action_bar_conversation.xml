@@ -23,7 +23,7 @@
         tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
     <TextView
-        android:id="@+id/nameofreciever"
+        android:id="@+id/conversation_title_on_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
