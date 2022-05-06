@@ -33,14 +33,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         query = new ConversationBarDataQuery(getApplicationContext());
         weakActivity = new WeakReference<>(MainActivity.this);
+
+        SetUpViews();
 
         if (CheckUserInSharedRef()) {
             CheckUserInSharedRefValid();
         }
         else {
+            firstTimeLaunched = false;
             ReLogin();
         }
     }
@@ -48,9 +50,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        if(firstTimeLaunched){
+        if (firstTimeLaunched){
             firstTimeLaunched = false;
-            SetUpViews();
         }
         else {
             query.retrieveData();
@@ -95,12 +96,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void SetUpViews(){
-        List<ConversationBar> data = query.getData();
-        adapter = new ConversationListAdapter(getApplicationContext(), data);
-        adapter.notifyDataSetChanged();
-        listView = findViewById(R.id.conversation_list);
-        ConversationListAdapter adapter = new ConversationListAdapter(getApplicationContext(), data);
-        listView.setAdapter(adapter);
         menuButton = findViewById(R.id.menu_button);
         menuButton.setOnClickListener(menuClicked);
 
@@ -109,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void SetUpConversationsList(){
+        adapter = new ConversationListAdapter(getApplicationContext(), data);
         adapter.notifyDataSetChanged();
         listView = findViewById(R.id.conversation_list);
         listView.setAdapter(adapter);
@@ -129,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void UpdateMenu(){
         data = query.getData();
+        Log.d("Check_data", String.valueOf(data.size()));
         SetUpConversationsList();
     }
 }

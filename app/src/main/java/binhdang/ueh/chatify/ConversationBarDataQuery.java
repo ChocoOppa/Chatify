@@ -88,12 +88,10 @@ public class ConversationBarDataQuery {
                                                                                                     "pfp/" + result3.get("username") + ".jpg",
                                                                                                     result2.get("lastConversationMsg").toString(),
                                                                                                     result2.get("lastConversationTime").toString());
-
                                                                                             data.add(bar);
-
-                                                                                            Tasks.whenAllSuccess(task, task1, task2, task3).addOnSuccessListener(list -> MainActivity.getInstanceActivity().UpdateMenu());
                                                                                         }
                                                                                     }
+                                                                                    Tasks.whenAllSuccess(task, task1, task2, task3).addOnSuccessListener(list -> MainActivity.getInstanceActivity().UpdateMenu());
                                                                                 });
                                                                     }
                                                                 }

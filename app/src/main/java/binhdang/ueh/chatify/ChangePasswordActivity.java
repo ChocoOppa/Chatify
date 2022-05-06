@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -60,7 +61,11 @@ public class ChangePasswordActivity extends Activity {
                                     String docID = doc.getId();
                                     db.collection("users")
                                             .document(docID)
-                                            .update("password", String.valueOf(changePassword.getText()));
+                                            .update("password", String.valueOf(changePassword.getText()))
+                                            .addOnCompleteListener(task1 -> {
+                                                Toast.makeText(getApplicationContext(), "Change password successfully!", Toast.LENGTH_SHORT).show(); 
+                                                finish();
+                                            });
                                 }
                             });
                 } else {

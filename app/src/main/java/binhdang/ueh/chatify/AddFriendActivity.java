@@ -101,19 +101,7 @@ public class AddFriendActivity extends Activity {
         resultUserName = username;
         friendToAddUsername.setText(username);
 
-        db.collection("users")
-                .whereEqualTo("user1", sharedPref.getString("username", ""))
-                .whereEqualTo("user2", resultUserName)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        for(QueryDocumentSnapshot doc: task.getResult()) {
-                            if (doc.getData().size() <= 0){
-                                addFriendButton.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }
-                });
+        addFriendButton.setVisibility(View.VISIBLE);
     }
 
     View.OnClickListener AddFriendButtonClicked = view -> {
