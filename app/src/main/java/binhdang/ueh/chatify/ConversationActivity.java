@@ -1,13 +1,10 @@
 package binhdang.ueh.chatify;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -20,32 +17,33 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConversationActivity extends Activity {
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     TextView conversationTitle;
     EditText inputChat;
     ImageButton backButton;
-    //ImageButton infoButton;
+    ImageButton infoButton;
     ImageButton sendButton;
     RecyclerView messageRecyclerView;
 
-    MessagesAdapter messageAdapter;
-    ArrayList<Messages> messageArrayList;
+    MessageAdapter messageAdapter;
+    ArrayList<Message> messageArrayList;
     String currentUsername, conversation;
     String type;
     String time;
 
     String enteredMessage;
+
+    private static ConversationActivity currentConversation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,11 +52,13 @@ public class ConversationActivity extends Activity {
 
         messageArrayList = new ArrayList<>();
 
+        currentConversation = this;
+
         conversationTitle = findViewById(R.id.conversation_title_on_bar);
         inputChat = findViewById(R.id.chat_input);
         backButton = findViewById(R.id.back_button);
 
-        //infoButton = findViewById(R.id.info_button);
+        infoButton = findViewById(R.id.info_button);
 
         sendButton = findViewById(R.id.send_button);
         messageRecyclerView =findViewById(R.id.message_recyclerView);
@@ -87,12 +87,12 @@ public class ConversationActivity extends Activity {
 
         backButton.setOnClickListener(view -> finish());
 
-/*        infoButton.setOnClickListener(view -> {
+        infoButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), ViewConversationInfoActivity.class);
             intent.putExtra("conversation", conversation);
             intent.putExtra("type", type);
             startActivity(intent);
-        });*/
+        });
 
         sendButton.setOnClickListener(view -> {
             enteredMessage = inputChat.getText().toString();
@@ -150,7 +150,7 @@ public class ConversationActivity extends Activity {
     });
 
     private void ChatDataUpdate(){
-        messageAdapter = new MessagesAdapter(ConversationActivity.this, messageArrayList);
+        messageAdapter = new MessageAdapter(ConversationActivity.this, messageArrayList);
         messageRecyclerView.setAdapter(messageAdapter);
         messageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         messageRecyclerView.scrollToPosition(messageArrayList.size() - 1);
@@ -165,7 +165,7 @@ public class ConversationActivity extends Activity {
                     for(QueryDocumentSnapshot document : task.getResult()) {
                         if(document.getData().size() > 0) {
                             Map msg = document.getData();
-                            Messages message = new Messages(msg.get("message").toString(),
+                            Message message = new Message(msg.get("message").toString(),
                                     msg.get("time").toString(),
                                     msg.get("senderName").toString());
                             messageArrayList.add(message);
@@ -177,5 +177,5 @@ public class ConversationActivity extends Activity {
                 });
     }
 
-    //public static ConversationActivity getInstance(){ return currentConversation; }
+    public static ConversationActivity getInstance(){ return currentConversation; }
 }

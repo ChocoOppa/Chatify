@@ -39,15 +39,16 @@ public class ViewConversationInfoActivity extends Activity {
 
     String otherUsernameInPrivate;
 
-    //boolean removeButtonPressed = false;
+    boolean removeButtonPressed = false;
 
-    //boolean[] finishedRemovePrivateCon = new boolean[] {false, false, false, false, false, false};
+    boolean[] finishedRemovePrivateCon = new boolean[] {false, false, false, false, false, false};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SetUpViews();
+        setContentView(R.layout.activity_view_conversation_info);
 
+        SetUpViews();
         conversation = getIntent().getStringExtra("conversation");
         type = getIntent().getStringExtra("type");
         RetrieveConversationProfile();
@@ -60,15 +61,15 @@ public class ViewConversationInfoActivity extends Activity {
         backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(backButtonClicked);
 
-        // removeConversation = findViewById(R.id.remove_conversation_button);
-        // removeConversation.setOnClickListener(removeConversationButtonClicked);
+        removeConversation = findViewById(R.id.remove_conversation_button);
+        removeConversation.setOnClickListener(removeConversationButtonClicked);
     }
 
     View.OnClickListener backButtonClicked = view -> {
         finish();
     };
 
-/*    View.OnClickListener removeConversationButtonClicked = view -> {
+    View.OnClickListener removeConversationButtonClicked = view -> {
         SharedPreferences sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE);
         if(!removeButtonPressed){
             removeButtonPressed = true;
@@ -161,7 +162,7 @@ public class ViewConversationInfoActivity extends Activity {
         }
         Toast.makeText(getApplicationContext(), "Successfully remove user!", Toast.LENGTH_SHORT).show();
         finish();
-    }*/
+    }
 
     private void RetrieveConversationProfile(){
         SharedPreferences sharedPref = getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE);

@@ -41,14 +41,14 @@
             android:textAlignment="center"
             android:layout_margin="8sp"/>
 
-<!--        <Button
+        <Button
             android:id="@+id/remove_conversation_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20sp"
             android:text="@string/remove_this_friend"
             android:visibility="gone"
-            tools:ignore="TextContrastCheck" />-->
+            tools:ignore="TextContrastCheck" />
 
     </LinearLayout>
 

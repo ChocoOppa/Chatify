@@ -13,20 +13,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class MessagesAdapter extends RecyclerView.Adapter{
+public class MessageAdapter extends RecyclerView.Adapter{
     Context context;
-    ArrayList<Messages> messArraylist;
+    ArrayList<Message> messArraylist;
     SimpleDateFormat simpleDateFormat;
     int send = 1;
     int receive = 2;
 
-    public MessagesAdapter(Context context, ArrayList<Messages> messArraylist) {
+    public MessageAdapter(Context context, ArrayList<Message> messArraylist) {
         this.context = context;
         this.messArraylist = messArraylist;
         simpleDateFormat = new SimpleDateFormat("HH:mm");
@@ -49,27 +47,27 @@ public class MessagesAdapter extends RecyclerView.Adapter{
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Messages messages = messArraylist.get(position);
+        Message message = messArraylist.get(position);
         Log.d("Adding", "Ah yes!");
         if(holder.getClass() == SenderViewHolder.class) {
             SenderViewHolder viewHolder = (SenderViewHolder)holder;
-            viewHolder.textViewMessage.setText(messages.getMessage());
-            viewHolder.timeOfMessage.setText(simpleDateFormat.format(Long.parseLong(messages.getTime())));
+            viewHolder.textViewMessage.setText(message.getMessage());
+            viewHolder.timeOfMessage.setText(simpleDateFormat.format(Long.parseLong(message.getTime())));
         }
         else {
             ReceiverViewHolder viewHolder = (ReceiverViewHolder)holder;
-            viewHolder.textViewMessage.setText(messages.getMessage());
-            viewHolder.timeOfMessage.setText(simpleDateFormat.format(Long.parseLong(messages.getTime())));
+            viewHolder.textViewMessage.setText(message.getMessage());
+            viewHolder.timeOfMessage.setText(simpleDateFormat.format(Long.parseLong(message.getTime())));
         }
 
     }
 
     @Override
     public int getItemViewType(int position) {
-        Messages messages = messArraylist.get(position);
+        Message message = messArraylist.get(position);
         SharedPreferences sharedPref = context.getSharedPreferences(context.getPackageName(), MODE_PRIVATE);
         String currentUsername = sharedPref.getString("username", "");
-        if(currentUsername.equals(messages.getSenderName())) {
+        if(currentUsername.equals(message.getSenderName())) {
             return send;
         }
         else {

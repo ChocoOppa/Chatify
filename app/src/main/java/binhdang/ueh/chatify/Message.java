@@ -1,11 +1,11 @@
 package binhdang.ueh.chatify;
 
-public class Messages {
+public class Message {
     String message;
     String time;
     String senderName;
 
-    public Messages(String message, String time, String senderName) {
+    public Message(String message, String time, String senderName) {
         this.message = message;
         this.time = time;
         this.senderName = senderName;
